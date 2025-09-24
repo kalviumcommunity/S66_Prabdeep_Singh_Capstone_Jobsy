@@ -14,6 +14,20 @@ res.json(jobs);
 });
 
 
+app.post("/jobs", async (req, res) => {
+  try {
+    const { title, description, company, location } = req.body;
+    const newJob = await Job.create({ title, description, company, location });
+    res.status(201).json(newJob);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
+
+
+
 app.listen(5000, () => {
 console.log("Server running on http://localhost:5000");
 });
