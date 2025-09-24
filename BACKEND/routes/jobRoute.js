@@ -1,36 +1,31 @@
-import express from "express";
-const app = express();
+import { Router } from "express";
+import Job from "../models/job.model.js"; 
 
+const router = Router();
 
+// Mock data (for testing)
 const jobs = [
-{ id: 1, title: "Software Engineer", company: "Google", location: "Bangalore" },
-{ id: 2, title: "Backend Developer", company: "Amazon", location: "Hyderabad" },
-{ id: 3, title: "Frontend Intern", company: "Kalvium", location: "Remote" }
+  { id: 1, title: "Software Engineer", company: "Google", location: "Bangalore" },
+  { id: 2, title: "Backend Developer", company: "Amazon", location: "Hyderabad" },
+  { id: 3, title: "Frontend Intern", company: "Kalvium", location: "Remote" }
 ];
 
-
-app.get("/api/jobs", (req, res) => {
-res.json(jobs);
+// GET all jobs
+router.get("/api/jobs", (req, res) => {
+  res.json(jobs);
 });
 
-
-app.post("/jobs", async (req, res) => {
+// POST a new job
+router.post("/jobs", async (req, res) => {
   try {
-    const { title, description, company, location } = req.body;
-    const newJob = await Job.create({ title, description, company, location });
+    // pass the whole request body
+    const newJob = await Job.create(req.body);
+
     res.status(201).json(newJob);
-  } catch (err) {
+  } catch (err) {``
     res.status(400).json({ error: err.message });
   }
 });
 
-app.put('/api/users/:id', async (req, res) => {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updatedUser);
-});
 
-
-
-app.listen(5000, () => {
-console.log("Server running on http://localhost:5000");
-});
+export default router;
