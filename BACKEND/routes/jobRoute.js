@@ -24,7 +24,10 @@ app.post("/jobs", async (req, res) => {
   }
 });
 
-
+app.put('/api/users/:id', async (req, res) => {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedUser);
+});
 
 
 
