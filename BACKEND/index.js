@@ -1,22 +1,43 @@
 import express from "express";
-import jobsRouter from "./routes/jobRoute.js";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+import User from "./models/User.js";
+
+dotenv.config();
 
 const app = express();
-
 app.use(express.json());
 
-const MONGO_URI = "mongodb://127.0.0.1:27017/capstone"; // local MongoDB
-// or your MongoDB Atlas URI, e.g.:
-// const MONGO_URI = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/capstone";
-
+// ✅ MongoDB connection
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ DB connection error:", err));
 
-// Use routers
-app.use(jobsRouter);
-
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+app.post("/api/users", async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    const user = new User({ name, email, password, role });
+    await user.save();
+    res.status(201).json({ message: "User created", user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ✅ Read (Get all users)
+app.get("/api/users", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
