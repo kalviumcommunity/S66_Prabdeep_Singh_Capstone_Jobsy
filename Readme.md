@@ -94,4 +94,4 @@
 - **Day 12 - 13**: Perform integration testing using Postman and fix bugs.
 - **Day 14**: Deploy frontend and backend, conduct final testing, and gather feedback.
 
-
+🚀 [Live Frontend](https://genuine-parfait-f2900b.netlify.app/)
