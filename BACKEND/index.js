@@ -41,3 +41,9 @@ app.get("/api/users", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get("/",async(req,res)=>{
+  res.json("Hello Backend");
+})
+
+
